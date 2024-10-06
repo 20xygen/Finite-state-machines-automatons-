@@ -89,8 +89,8 @@
 - [`README.md`](README.md) - Документация проекта.
 - [`requirements.txt`](requirements.txt) - Список зависимостей.
 - [`example.jpg`](example.jpg) - Фотография-пример для документации.
-- [`example.jpg`](example.jpg) - Скриншот пройденных тестов для документации.
-- [`example.jpg`](example.jpg) - Игнорируемые файлы.
+- [`tests_completed.jpg`](example.jpg) - Скриншот пройденных тестов для документации.
+- [`.gitignore`](example.jpg) - Игнорируемые файлы.
 
 
 ## Рализованные операции
@@ -115,11 +115,11 @@
 
 ### ДКА → ПДКА
 - Функция, преобразующая детерминированный конечный автомат (ДКА) в полный детерминированный конечный автомат (ПДКА). 
-- Реализовано в файле [transform.py](operations/transform.py).
+- `make_complete` в файле [transform.py](operations/transform.py).
 
 ### ПДКА → МПДКА
 - Функция, минимизирующая полный детерминированный конечное автомат (ПДКА).
-- `make_complete` в файле [transform.py](operations/transform.py).
+- `minimize` в файле [transform.py](operations/transform.py).
 
 ### (МПД)КА → Регулярное выражение
 - Функция, получающая регулярное выражение по данному конечному автомату.
