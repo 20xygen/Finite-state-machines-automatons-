@@ -3,9 +3,10 @@ from typing import Optional, Union
 from interface.text import str_to_nfa, nfa_to_str
 from pathlib import Path
 from operations.poland import to_polish_notation, polska_into_auto
-from operations.transform import determinate, minimize, make_complete, complement
+from operations.transform import determinate, minimize, make_complete, complement, eps_closure
 from operations.regexify import to_regex
 from interface.graph import visualize_automaton
+from typing import Set
 
 
 class NFA:
@@ -15,30 +16,27 @@ class NFA:
         if text is not None:
             self.auto = str_to_nfa(text)
 
-    def __process_eps(self, pos: int, remaining: str, cur: Vertex) -> bool:
-        if '' in cur.delta.keys():
-            flag = False
-            for to in cur.delta['']:
-                flag = flag or self.__process(pos, remaining, to)
-                if flag:
-                    break
-            return flag
-        return False
+    def __process_eps(self, pos: int, remaining: str, cur: Vertex) -> bool:  # deprecated
+        if '' not in cur.delta.keys():
+            return False
+        closure: Set[Vertex] = set()
+        eps_closure(cur, closure)
+        if pos == len(remaining):
+            return any([vert.terminal for vert in closure])
+        return any([self.__process(pos, remaining, vert) for vert in closure])
 
     def __process(self, pos: int, remaining: str, cur: Vertex) -> bool:
+        closure: Set[Vertex] = set()
+        eps_closure(cur, closure)
         if pos == len(remaining):
-            if cur.terminal:
-                return True
-            return self.__process_eps(pos, remaining, cur)
+            return any([vert.terminal for vert in closure])
         sym = remaining[pos]
-        if sym in cur.delta.keys():
-            flag = False
-            for to in cur.delta[sym]:
-                flag = flag or self.__process(pos + 1, remaining, to)
-                if flag:
-                    break
-            return flag
-        return self.__process_eps(pos, remaining, cur)
+        for vert in closure:
+            if sym in vert.delta.keys():
+                for to in vert.delta[sym]:
+                    if self.__process(pos + 1, remaining, to):
+                        return True
+        return False
 
     def process(self, word: str):
         return self.__process(0, word, self.auto.start)
