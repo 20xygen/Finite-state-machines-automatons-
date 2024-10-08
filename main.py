@@ -59,7 +59,7 @@ sigma = ['a', 'b']
 
 # By regex
 
-regex = "b^a(a+bb)*"
+regex = "(a(ab+b(ba)*a)*)*"
 print("Regular expression:", regex)
 polish_notation = to_polish_notation(regex)
 print("Polish notation:", polish_notation)
@@ -69,33 +69,33 @@ visualize_automaton(auto, 'original', True)
 # Determinization
 
 table, det = determinate(auto, sigma)
-# visualize_automaton(det, 'det', True)
+visualize_automaton(det, 'determine', True)
 my_det_h, my_det_f = print_determinization(table, sigma)
-save_automaton(det, 'first.json')
-save_table('det.txt', my_det_h, my_det_f)
+# save_automaton(det, 'first.json')
+save_table('determinization.txt', my_det_h, my_det_f)
 
 # Making complete
 
 make_complete(det, sigma)
-visualize_automaton(det, 'full', True)
-save_automaton(det, 'second.json')
+# visualize_automaton(det, 'full', True)
+# save_automaton(det, 'second.json')
+
+# Make complement
+
+complement(det)
+visualize_automaton(det, 'complement', True)
+# save_automaton(mini, 'fifth.json')
 
 # Minimization
 
 tables, mini = minimize(det, sigma)
-# visualize_automaton(mini, 'mini', True)
+visualize_automaton(mini, 'minimized', True)
 my_min_h, my_min_f = print_minimization(tables, sigma)
-save_automaton(mini, 'third.json')
-save_tables('min.txt', my_min_h, my_min_f)
-save_automaton(mini, 'fourth.json')
+# save_automaton(mini, 'third.json')
+save_tables('minimization.txt', my_min_h, my_min_f)
+# save_automaton(mini, 'fourth.json')
 
 # Regex by FA
 
 rx = to_regex(mini)
 print("Rugular expression:", rx)
-
-# Make complement
-
-complement(mini)
-visualize_automaton(mini, 'complement', True)
-save_automaton(mini, 'fifth.json')
